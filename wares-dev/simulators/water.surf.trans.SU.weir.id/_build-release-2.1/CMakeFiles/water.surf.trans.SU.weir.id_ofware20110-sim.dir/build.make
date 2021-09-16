@@ -101,6 +101,7 @@ water.surf.trans.SU.weir.id_ofware20110-sim.dylib: CMakeFiles/water.surf.trans.S
 water.surf.trans.SU.weir.id_ofware20110-sim.dylib: /usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-core.dylib
 water.surf.trans.SU.weir.id_ofware20110-sim.dylib: /usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-base.dylib
 water.surf.trans.SU.weir.id_ofware20110-sim.dylib: /usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib
+water.surf.trans.SU.weir.id_ofware20110-sim.dylib: /usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-tools.dylib
 water.surf.trans.SU.weir.id_ofware20110-sim.dylib: CMakeFiles/water.surf.trans.SU.weir.id_ofware20110-sim.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/2018co001/.openfluid/workspace/wares-dev/simulators/water.surf.trans.SU.weir.id/_build-release-2.1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared module water.surf.trans.SU.weir.id_ofware20110-sim.dylib"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/water.surf.trans.SU.weir.id_ofware20110-sim.dir/link.txt --verbose=$(VERBOSE)

@@ -11,6 +11,10 @@
   </generator>
   <simulator ID="water_surf_precipitation-su.id" enabled="1">
   </simulator>
+  <simulator ID="water.surf.trans.SU.weir.id" enabled="1">
+  </simulator>
+  <simulator ID="water.surf.transf.RS.weir.id" enabled="1">
+  </simulator>
  </model>
 
 

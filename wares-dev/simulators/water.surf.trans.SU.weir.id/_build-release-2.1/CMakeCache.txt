@@ -244,7 +244,7 @@ OpenFLUID_INCLUDE_DIR:PATH=/usr/local/Caskroom/openfluid/2.1.10/include
 OpenFLUID_INCLUDE_DIRS:PATH=/usr/local/Caskroom/openfluid/2.1.10/include
 
 //OpenFLUID libraries
-OpenFLUID_LIBRARIES:STRING=/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-core.dylib;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-base.dylib;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib
+OpenFLUID_LIBRARIES:STRING=/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-core.dylib;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-base.dylib;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-tools.dylib
 
 //OpenFLUID library directory
 OpenFLUID_LIBRARY_DIR:PATH=/usr/local/Caskroom/openfluid/2.1.10/lib
@@ -257,6 +257,9 @@ OpenFLUID_OBSERVER_FILENAME_SUFFIX:STRING=_ofware20110-obs
 
 //OpenFLUID simulator file name suffix
 OpenFLUID_SIMULATOR_FILENAME_SUFFIX:STRING=_ofware20110-sim
+
+//OpenFLUID tools library
+OpenFLUID_TOOLS_LIBRARY:FILEPATH=/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-tools.dylib
 
 //OpenFLUID version
 OpenFLUID_VERSION:STRING=2.1.10
@@ -286,10 +289,13 @@ _OpenFLUID_HOME_DIR:PATH=/usr/local/Caskroom/openfluid/2.1.10
 _OpenFLUID_INCLUDE_DIR:PATH=/usr/local/Caskroom/openfluid/2.1.10/include
 
 //Path to a library.
+_OpenFLUID_TOOLS_LIBRARY:FILEPATH=/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-tools.dylib
+
+//Path to a library.
 _OpenFLUID_WARE_LIBRARY:FILEPATH=/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib
 
 //Dependencies for the target
-water.surf.trans.SU.weir.id_ofware20110-sim_LIB_DEPENDS:STATIC=general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-core.dylib;general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-base.dylib;general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib;
+water.surf.trans.SU.weir.id_ofware20110-sim_LIB_DEPENDS:STATIC=general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-core.dylib;general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-base.dylib;general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-ware.dylib;general;/usr/local/Caskroom/openfluid/2.1.10/lib/libopenfluid-tools.dylib;
 
 
 ########################

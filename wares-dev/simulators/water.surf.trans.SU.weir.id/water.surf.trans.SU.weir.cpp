@@ -20,7 +20,7 @@
 // =====================================================================
 
 
-BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.SU_modified.id");
+BEGIN_SIMULATOR_SIGNATURE("water.surf.trans.SU.weir.id");
 
  // Informations
   DECLARE_NAME("Water transfer on surface units using the weir equation");
@@ -33,11 +33,12 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.SU_modified.id");
   // Required and used variables
 
   //DECLARE_REQUIRED_VARIABLE("water.surf.H", "SU", "water height on surface of SU at the previous time step", "m");
-  DECLARE_USED_VARIABLE("water_level_input", "SU", "water level in the Bassac", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow", "SU", "water level in the SU", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow", "RS", "water level in the RS", "m") ;
 
   // Produced variable
 
-  DECLARE_PRODUCED_VARIABLE("z_new_flow", "SU", "new water level", "m");
+  DECLARE_PRODUCED_VARIABLE("z_new_flow", "SU", "water level in the SU", "m");
 
 
   // Required attributes for the test simulator:
@@ -327,9 +328,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
       OPENFLUID_AppendVariable(SU,"z_new_flow",z_new_flow);
 
 
-    
+        }
     return DefaultDeltaT(); /// leave at default deltaT
-    }
+
     }
 
 
