@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <model>
+  <simulator ID="water_surf_precipitation-su.id" enabled="1">
+  </simulator>
+ </model>
+
+
+</openfluid>
+

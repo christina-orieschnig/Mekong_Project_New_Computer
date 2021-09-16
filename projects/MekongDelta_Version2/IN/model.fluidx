@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <model>
+  <generator varname="water_level_input" unitsclass="RS" method="inject" enabled="1">
+   <param name="distribution" value="distri.dat"/>
+   <param name="sources" value="waterlevel.xml"/>
+  </generator>
+  <generator varname="water_rain_rate" unitsclass="SU" method="inject" enabled="1">
+   <param name="distribution" value="distri.dat"/>
+   <param name="sources" value="rainfall.xml"/>
+  </generator>
+  <simulator ID="water_surf_precipitation-su.id" enabled="1">
+  </simulator>
+ </model>
+
+
+</openfluid>
+
