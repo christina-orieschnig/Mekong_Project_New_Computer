@@ -33,18 +33,18 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.trans.SU.weir.id");
   // Required and used variables
 
   //DECLARE_REQUIRED_VARIABLE("water.surf.H", "SU", "water height on surface of SU at the previous time step", "m");
-  DECLARE_USED_VARIABLE("z_new_flow", "SU", "water level in the SU", "m") ;
-  DECLARE_USED_VARIABLE("z_new_flow", "RS", "water level in the RS", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m") ;
 
   // Produced variable
 
-  DECLARE_PRODUCED_VARIABLE("z_new_flow", "SU", "water level in the SU", "m");
+  DECLARE_PRODUCED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m");
 
 
   // Required attributes for the test simulator:
 
   DECLARE_REQUIRED_ATTRIBUTE("area", "SU", "area of SU", "m");
-  DECLARE_REQUIRED_ATTRIBUTE("conn_len", "SU", "intersection between the two SU and other RS and SU - basic weir length", "m");
+  DECLARE_REQUIRED_ATTRIBUTE("conn_lengt", "SU", "intersection between the two SU and other RS and SU - basic weir length", "m");
   DECLARE_REQUIRED_ATTRIBUTE("OFLD_TO", "SU", "list of connections between the SU and other RS and SU - basic weir length", "m");
   DECLARE_REQUIRED_ATTRIBUTE("elev", "SU", "mean elev of SU", "m"); /// this should really be pulled from the elevation-area curve
 
@@ -195,7 +195,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
     openfluid::core::SpatialUnit* SU;
     OPENFLUID_UNITS_ORDERED_LOOP("SU",SU)
   {
-    OPENFLUID_InitializeVariable(SU,"z_new_flow",0.0); //// initialize new water level height to 0 at the beginning
+    OPENFLUID_InitializeVariable(SU,"z_new_flow_SU",0.0); //// initialize new water level height to 0 at the beginning
 
   }
 
@@ -277,12 +277,21 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             int neighbour_ID = stoi(ID_TO_number); /// convert string to integer
            
             std::string ID_TO_type = ID_TO.substr(0, 2); /// check whether the neighbour is a RS or a SU 
+           
+            std::string neighbour_variable;
+           
+            if (ID_TO_type == "SU"){
+             neighbour_variable = "z_flow_new_SU";
+           }
+            else {
+             neighbour_variable = "z_flow_new_RS";
+           }
 
             openfluid::core::DoubleValue water_level_neighbour;
 
             openfluid::core::SpatialUnit* SU_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
 
-            OPENFLUID_GetAttribute(SU_neighbour,"z_new_flow",water_level_neighbour); /// not sure if this is in the right order  
+            OPENFLUID_GetAttribute(SU_neighbour, neighbour_variable, water_level_neighbour); /// not sure if this is in the right order  
 
             double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
@@ -290,7 +299,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
             openfluid::core::DoubleValue Z2;
             
-            OPENFLUID_GetVariable(SU,"z_new_flow",PreviousTimeIndex, Z2); /// absolute water level INSIDE the SU at the beginning of the time step
+            OPENFLUID_GetVariable(SU,"z_new_flow_SU",PreviousTimeIndex, Z2); /// absolute water level INSIDE the SU at the beginning of the time step
 
             double Z_weir = z_weir; /// absolute elevation of the weir
 
@@ -322,10 +331,14 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
              flow_sum += n;
        
       double A = area ; /// area of the SU
+      
+      double Z2;
+      
+     OPENFLUID_GetVariable(SU,"z_new_flow_SU",PreviousTimeIndex, Z2);
        
-      openfluid::core::DoubleValue z_new_flow = flow_sum / A;
+      openfluid::core::DoubleValue z_new_flow = flow_sum / A+ Z2;
 
-      OPENFLUID_AppendVariable(SU,"z_new_flow",z_new_flow);
+      OPENFLUID_AppendVariable(SU,"z_new_flow_SU",z_new_flow);
 
 
         }

@@ -35,17 +35,18 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.RS.weir.id");
 
   //DECLARE_REQUIRED_VARIABLE("water.surf.H", "SU", "water height on surface of SU at the previous time step", "m");
   DECLARE_USED_VARIABLE("water_level_input", "RS", "water level in the Bassac", "m") ;
-  DECLARE_USED_VARIABLE("z_new_flow", "RS", "water level in the RS", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m") ;
 
   // Produced variable
 
-  DECLARE_PRODUCED_VARIABLE("z_new_flow", "RS", "water level in the RS", "m");
+  DECLARE_PRODUCED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m");
 
 
   // Required attributes for the test simulator:
 
   DECLARE_REQUIRED_ATTRIBUTE("length", "RS", "length of RS", "m");
-  DECLARE_REQUIRED_ATTRIBUTE("conn_len", "RS", "intersection between the two RS and other RS and SU - basic weir length", "m");
+  DECLARE_REQUIRED_ATTRIBUTE("conn_lengt", "RS", "intersection between the two RS and other RS and SU - basic weir length", "m");
   DECLARE_REQUIRED_ATTRIBUTE("OFLD_TO", "RS", "list of connections between the RS and other RS and SU", "");
 
 
@@ -198,7 +199,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
     openfluid::core::SpatialUnit* RS;
     OPENFLUID_UNITS_ORDERED_LOOP("RS",RS)
   {
-    OPENFLUID_InitializeVariable(RS,"z_new_flow",0.0); //// initialize new water level height to 0 at the beginning
+    OPENFLUID_InitializeVariable(RS,"z_new_flow_RS",0.0); //// initialize new water level height to 0 at the beginning
 
   }
 
@@ -233,7 +234,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
           openfluid::core::DoubleValue z_new_flow = water_level_Bassac; /// save the water level measured at this time step as the water level
 
-          OPENFLUID_AppendVariable(RS,"z_new_flow",z_new_flow);
+          OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
 
       }
 
@@ -298,12 +299,21 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               int neighbour_ID = stoi(ID_TO_number); /// convert string to integer
              
               std::string ID_TO_type = ID_TO.substr(0, 2); /// check whether the neighbour is a RS or a SU 
+            
+            std::string neighbour_variable; 
+            
+            if (ID_TO_type == "SU"){
+             neighbour_variable = "z_flow_new_SU";
+           }
+            else {
+             neighbour_variable = "z_flow_new_RS";
+           }
 
               openfluid::core::DoubleValue water_level_neighbour;
 
               openfluid::core::SpatialUnit* RS_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
 
-              OPENFLUID_GetAttribute(RS_neighbour,"z_new_flow",water_level_neighbour); /// not sure if this is in the right order  
+              OPENFLUID_GetAttribute(RS_neighbour,neighbour_variable,water_level_neighbour); /// not sure if this is in the right order  
 
               double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
@@ -311,7 +321,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
               openfluid::core::DoubleValue Z2;
              
-              OPENFLUID_GetVariable(RS,"z_new_flow",PreviousTimeIndex, Z2); /// absolute water level INSIDE the SU at the beginning of the time step
+              OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, Z2); /// absolute water level INSIDE the SU at the beginning of the time step
 
               double Z_weir = z_weir; /// absolute elevation of the weir
 
@@ -344,9 +354,13 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
          
         double A = length*width ; /// area of the RS
          
-        openfluid::core::DoubleValue z_new_flow = flow_sum / A;
+      double Z2;
+      
+      OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, Z2);
+       
+       openfluid::core::DoubleValue z_new_flow = flow_sum / A+ Z2;
 
-        OPENFLUID_AppendVariable(RS,"z_new_flow",z_new_flow);
+        OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
         }
 
         }
