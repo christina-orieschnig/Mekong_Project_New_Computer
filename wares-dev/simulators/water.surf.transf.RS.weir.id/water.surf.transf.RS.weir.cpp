@@ -294,7 +294,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
               std::string  ID_TO = OFLD_TO_list[i]; /// get the ID in question
 
-              std::string  ID_TO_number = ID_TO.erase(0,3); /// erase the first three  characters in the string  (RS#)  to get just the number
+              std::string  ID_TO_number = ID_TO.substr(3,3); /// erase the first three  characters in the string  (RS#)  to get just the number
              
               int neighbour_ID = stoi(ID_TO_number); /// convert string to integer
              
@@ -303,17 +303,17 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             std::string neighbour_variable; 
             
             if (ID_TO_type == "SU"){
-             neighbour_variable = "z_flow_new_SU";
+             neighbour_variable = "z_new_flow_SU";
            }
             else {
-             neighbour_variable = "z_flow_new_RS";
+             neighbour_variable = "z_new_flow_RS";
            }
 
               openfluid::core::DoubleValue water_level_neighbour;
 
               openfluid::core::SpatialUnit* RS_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
 
-              OPENFLUID_GetAttribute(RS_neighbour,neighbour_variable,water_level_neighbour); /// not sure if this is in the right order  
+              OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,water_level_neighbour); /// not sure if this is in the right order  
 
               double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
