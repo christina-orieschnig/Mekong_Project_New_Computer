@@ -199,7 +199,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
   }
 
-      return DefaultDeltaT(); /// leave at default deltaT
+      return MultipliedDefaultDeltaT(60); /// leave at default deltaT
     }
 
 
@@ -210,6 +210,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     openfluid::base::SchedulingRequest runStep()
     {
+       OPENFLUID_LogAndDisplayInfo("message");
 
       openfluid::core::SpatialUnit* SU; /// define spatial units
       openfluid::core::UnitID_t ID;
@@ -225,7 +226,10 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
         double dtd = OPENFLUID_GetDefaultDeltaT(); /// timestep in days
         openfluid::core::TimeIndex_t CurrentTimeIndex = OPENFLUID_GetCurrentTimeIndex();
-        openfluid::core::TimeIndex_t PreviousTimeIndex = OPENFLUID_GetPreviousRunTimeIndex();
+        openfluid::core::TimeIndex_t PreviousTimeIndex = CurrentTimeIndex-dtd*60;
+        
+        // OPENFLUID_LogDebug(PreviousTimeIndex);
+       
 
         double elev;  /// elevation of SU
         OPENFLUID_GetAttribute(SU,"elev",elev);
@@ -237,7 +241,17 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
         /////// 1 - access OFLD_TO and conn_lengt fields
 
         openfluid::core::StringValue conn_lengt; // define connection length as double value type OF object
-        OPENFLUID_GetAttribute(SU,"conn_lengt",conn_lengt); // get the connection lengths of ther SU to the SU/RS in question
+       try  {
+       OPENFLUID_GetAttribute(SU,"conn_lengt",conn_lengt);}
+       
+       catch (...) {
+         openfluid::core::IntegerValue temp_length;
+         OPENFLUID_GetAttribute(SU,"conn_lengt",temp_length);
+        int length = temp_length.get();
+        std::string length_str = std::to_string(length) ;
+        conn_lengt.set(length_str);
+        
+        } // get the connection lengths of ther SU to the SU/RS in question
 
         openfluid::core::StringValue OFLD_TO; // define connection length as double value type OF object
         OPENFLUID_GetAttribute(SU,"OFLD_TO",OFLD_TO); // get the connections lengths of the SU to the SU/RS in question
@@ -290,8 +304,8 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             openfluid::core::DoubleValue  water_level_neighbour; /// define variable for previous water level in neighbouring element
 
             openfluid::core::SpatialUnit* SU_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
-
-            OPENFLUID_GetVariable(SU_neighbour, neighbour_variable, water_level_neighbour); /// not sure if this is in the right order  
+           
+             OPENFLUID_GetVariable(SU_neighbour,neighbour_variable, PreviousTimeIndex,water_level_neighbour);
 
             double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
@@ -349,7 +363,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
 
         }
-    return DefaultDeltaT(); /// leave at default deltaT
+    return MultipliedDefaultDeltaT(60); /// leave at default deltaT
 
     }
 

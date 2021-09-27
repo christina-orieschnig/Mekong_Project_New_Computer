@@ -203,7 +203,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
   }
 
-      return DefaultDeltaT(); /// leave at default deltaT
+      return MultipliedDefaultDeltaT(60); /// leave at default deltaT
     }
 
 
@@ -214,17 +214,23 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     openfluid::base::SchedulingRequest runStep()
     {
+      
+     
 
       openfluid::core::SpatialUnit* RS; /// define spatial units
-      openfluid::core::UnitID_t ID;
 
 
       OPENFLUID_UNITS_ORDERED_LOOP("RS",RS) // run this loop over each unit for this time step!
       {
+       openfluid::core::DoubleValue test;
+       
+       test = ((openfluid::core::DoubleValue*)OPENFLUID_GetLatestVariable(RS,"z_new_flow_RS").value())->get();
+       
+       OPENFLUID_LogAndDisplayInfo(test);
+       
+       int  ID_RS =  RS->getID(); // get the ID of the UNIT
 
-       int  ID =  RS->getID(); // get the ID of the UNIT
-
-       if (ID==1 || ID==28) { // if  the RS is #1 (Bassac river) or #28 (Stung)
+       if (ID_RS==1 || ID_RS==28) { // if  the RS is #1 (Bassac river) or #28 (Stung)
 
           openfluid::core::IndexedValue water_level_input;  // define water level input variable
 
@@ -235,6 +241,8 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
           openfluid::core::DoubleValue z_new_flow = water_level_Bassac; /// save the water level measured at this time step as the water level
 
           OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
+         OPENFLUID_LogAndDisplayInfo("printing ID" );
+        OPENFLUID_LogAndDisplayInfo(ID_RS);
 
       }
 
@@ -247,7 +255,8 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
           double dtd = OPENFLUID_GetDefaultDeltaT(); /// timestep in days
           openfluid::core::TimeIndex_t CurrentTimeIndex = OPENFLUID_GetCurrentTimeIndex();
-          openfluid::core::TimeIndex_t PreviousTimeIndex = OPENFLUID_GetPreviousRunTimeIndex();
+          openfluid::core::TimeIndex_t PreviousTimeIndex = CurrentTimeIndex-dtd*60;
+         
 
            openfluid::core::DoubleValue elev;  /// elevation of RS
            OPENFLUID_GetAttribute(RS,"elev",elev);
@@ -312,18 +321,21 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               openfluid::core::DoubleValue water_level_neighbour;
 
               openfluid::core::SpatialUnit* RS_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
+           
 
               OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,water_level_neighbour); /// not sure if this is in the right order  
 
               double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
-              double Z1 = water_level_neighbour ; /// absolute water level OUTSIDE the SU at the beginning of the time step, detract gauge elev if it's the Bassac!
+              double Z1 = water_level_neighbour.get(); /// absolute water level OUTSIDE the SU at the beginning of the time step, detract gauge elev if it's the Bassac!
 
-              openfluid::core::DoubleValue Z2;
+              openfluid::core::DoubleValue previous_value;
              
-              OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, Z2); /// absolute water level INSIDE the SU at the beginning of the time step
-
-              double Z_weir = z_weir; /// absolute elevation of the weir
+              OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, previous_value); /// absolute water level INSIDE the SU at the beginning of the time step
+ 
+             double Z2 = previous_value.get();
+             
+             double Z_weir = z_weir; /// absolute elevation of the weir
 
               double weir_length = conn_lengt_ati; /// length of the weir (= length of the intersection SU/RS, or SU/SU)
 
@@ -354,17 +366,23 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
          
         double A = length*width ; /// area of the RS
          
-      double Z2;
+      openfluid::core::DoubleValue  previous_level;
       
-      OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, Z2);
+      OPENFLUID_GetVariable(RS,"z_new_flow_RS",PreviousTimeIndex, previous_level);
+      
+      double Z2 = previous_level.get();
        
-       openfluid::core::DoubleValue z_new_flow = flow_sum / A+ Z2;
+      double new_flow = flow_sum / A+ Z2;
+       
+       openfluid::core::DoubleValue z_new_flow;
+       
+       z_new_flow.set(new_flow);
 
         OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
         }
 
         }
-    return DefaultDeltaT(); /// leave at default deltaT
+    return MultipliedDefaultDeltaT(60); /// leave at default deltaT
 
     }
 

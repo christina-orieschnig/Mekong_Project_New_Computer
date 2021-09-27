@@ -1,6 +1,11 @@
-[Info][source=framework] Date: Mon Sep 27 09:41:43 2021
+[Info][source=framework] Date: Mon Sep 27 17:43:28 2021
 
 [Info][source=framework] Computer: MPLCLTMP0294.local
 [Info][source=framework] User: 2018co001
 [Info][source=framework] Input directory: /Users/2018co001/.openfluid/workspace/projects/MekongDelta_Version2/IN
 [Info][source=framework] Output directory: /Users/2018co001/.openfluid/workspace/projects/MekongDelta_Version2/OUT
+[Info][source=ware,stage=RUNSTEP,timeindex=60,wareid=water.surf.trans.SU.weir.id,waretype=simulator] message
+[Info][source=ware,stage=RUNSTEP,timeindex=60,wareid=water.surf.transf.RS.weir.id,waretype=simulator] 0
+[Info][source=ware,stage=RUNSTEP,timeindex=60,wareid=water.surf.transf.RS.weir.id,waretype=simulator] printing ID
+[Info][source=ware,stage=RUNSTEP,timeindex=60,wareid=water.surf.transf.RS.weir.id,waretype=simulator] 1
+[Info][source=ware,stage=RUNSTEP,timeindex=60,wareid=water.surf.transf.RS.weir.id,waretype=simulator] 0
