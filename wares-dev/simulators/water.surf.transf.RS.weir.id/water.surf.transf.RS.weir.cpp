@@ -36,7 +36,6 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.RS.weir.id");
   //DECLARE_REQUIRED_VARIABLE("water.surf.H", "SU", "water height on surface of SU at the previous time step", "m");
   DECLARE_USED_VARIABLE("water_level_input", "RS", "water level in the Bassac", "m") ;
   DECLARE_USED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m") ;
-  DECLARE_USED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m") ;
 
   // Produced variable
 
@@ -226,7 +225,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
        
        test = ((openfluid::core::DoubleValue*)OPENFLUID_GetLatestVariable(RS,"z_new_flow_RS").value())->get();
        
-       OPENFLUID_LogAndDisplayInfo(test);
+       OPENFLUID_LogAndDisplayInfo("My test value is:" << test);
        
        int  ID_RS =  RS->getID(); // get the ID of the UNIT
 
@@ -241,8 +240,8 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
           openfluid::core::DoubleValue z_new_flow = water_level_Bassac; /// save the water level measured at this time step as the water level
 
           OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
-         OPENFLUID_LogAndDisplayInfo("printing ID" );
-        OPENFLUID_LogAndDisplayInfo(ID_RS);
+         
+        OPENFLUID_LogAndDisplayInfo("MyID is:" << ID_RS);
 
       }
 
