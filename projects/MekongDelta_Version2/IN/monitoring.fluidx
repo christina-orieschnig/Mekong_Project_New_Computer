@@ -13,6 +13,13 @@
    <param name="set.new.unitsclass" value="SU"/>
    <param name="set.new.vars" value="z_new_flow_SU"/>
   </observer>
+  <observer ID="export.vars.files.csv-multicols" enabled="0">
+   <param name="format.auto.colsep" value=";"/>
+   <param name="format.auto.date" value="ISO"/>
+   <param name="format.auto.header" value="colnames-as-comment"/>
+   <param name="set.autoAll.format" value="auto"/>
+   <param name="set.autoAll.selection" value="*#*:*"/>
+  </observer>
  </monitoring>
 
 

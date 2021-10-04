@@ -2,7 +2,7 @@
 <openfluid>
  <run>
   <scheduling deltat="1" constraint="none" />
-  <period begin="2019-10-01 00:00:00" end="2019-10-31 00:00:00" />
+  <period begin="2019-07-07 23:59:59" end="2019-07-09 00:00:00" />
  </run>
 
 

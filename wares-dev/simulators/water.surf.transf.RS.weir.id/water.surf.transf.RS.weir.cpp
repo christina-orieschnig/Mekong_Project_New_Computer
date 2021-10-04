@@ -322,7 +322,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               openfluid::core::SpatialUnit* RS_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
            
 
-              OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,water_level_neighbour); /// not sure if this is in the right order  
+              OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,PreviousTimeIndex,water_level_neighbour); /// not sure if this is in the right order  
 
               double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
