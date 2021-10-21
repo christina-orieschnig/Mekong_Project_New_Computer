@@ -4,10 +4,14 @@
   <generator varname="water_level_input" unitsclass="RS" method="inject" enabled="1">
    <param name="distribution" value="distri.dat"/>
    <param name="sources" value="waterlevel.xml"/>
+   <param name="thresholdmax" value="1000"/>
+   <param name="thresholdmin" value="0"/>
   </generator>
   <generator varname="water_rain_rate" unitsclass="SU" method="inject" enabled="1">
    <param name="distribution" value="distri.dat"/>
    <param name="sources" value="rainfall.xml"/>
+   <param name="thresholdmax" value="1000"/>
+   <param name="thresholdmin" value="0"/>
   </generator>
   <simulator ID="water_surf_precipitation-su.id" enabled="1">
   </simulator>

@@ -8,6 +8,10 @@
    <param name="format.flow.float-format" value="auto"/>
    <param name="format.flow.header" value="colnames-as-comment"/>
    <param name="format.flow.precision" value="5"/>
+   <param name="set.RS.format" value="flow"/>
+   <param name="set.RS.unitsIDs" value="*"/>
+   <param name="set.RS.unitsclass" value="RS"/>
+   <param name="set.RS.vars" value="*"/>
    <param name="set.new.format" value="flow"/>
    <param name="set.new.unitsIDs" value="*"/>
    <param name="set.new.unitsclass" value="SU"/>
@@ -19,6 +23,8 @@
    <param name="format.auto.header" value="colnames-as-comment"/>
    <param name="set.autoAll.format" value="auto"/>
    <param name="set.autoAll.selection" value="*#*:*"/>
+  </observer>
+  <observer ID="export.vars.files.csv" enabled="0">
   </observer>
  </monitoring>
 
