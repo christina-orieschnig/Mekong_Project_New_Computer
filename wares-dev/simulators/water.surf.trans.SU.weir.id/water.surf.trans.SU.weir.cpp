@@ -359,7 +359,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             //// Use Runge Kutta explicit scheme and weir equation (defined in separate flow formula to calculate new flow)
              Q_new = water_level_new(previous_water_level_at_unit, previous_water_level_at_neighbour, Z_weir, weir_length, coeff, area_at_unit, dts);  // new water level as result of interaction with this unit
             }
-
+/*
             OPENFLUID_LogAndDisplayInfo("ID");
             OPENFLUID_LogAndDisplayInfo(ID);
             OPENFLUID_LogAndDisplayInfo("ID_TO_type");
@@ -376,7 +376,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             OPENFLUID_LogAndDisplayInfo(previous_water_level_at_unit);
             OPENFLUID_LogAndDisplayInfo("flow");
             OPENFLUID_LogAndDisplayInfo(Q_new);
-            
+              */
             values.push_back(Q_new); // add the new  value to the vector
 
         }

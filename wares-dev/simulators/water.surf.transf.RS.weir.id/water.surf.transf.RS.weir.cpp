@@ -123,9 +123,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     double water_level_new(double Z1, double Z2, double Z_weir, double length, double coeff, double A, double dts){
 
-        
 
-        double k1 = Q_weir(Z1, Z2, Z_weir, length, coeff)/A; // divided by A gives height 
+
+        double k1 = Q_weir(Z1, Z2, Z_weir, length, coeff)/A; // divided by A gives height
         double z2 = Z2 + dts / 2 * k1;
         double k2 = Q_weir (Z1, z2, Z_weir, length, coeff)/A;
         double z3 = Z2 + dts/2 * k2;
@@ -134,11 +134,11 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
         double k4 = Q_weir (Z1, z4, Z_weir, length, coeff)/A;
         double km = (k1 + 2 * k2 + 2* k3 + k4)/6;
 
-        double  Q_new = dts*km*A; // <------------ get flow in the time interval  Question : positive / negative! 
-        
+        double  Q_new = dts*km*A; // <------------ get flow in the time interval  Question : positive / negative!
+
 
         //double Q_new = Q_weir(Z1, Z2, Z_weir, length, coeff);
-        
+
         return  Q_new;
       }
 
@@ -171,7 +171,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     void initParams(const openfluid::ware::WareParams_t& Params)
     {
-      
+
       openfluid::core::DoubleValue coefficient;
       openfluid::core::DoubleValue weir_height_rel;
 
@@ -232,15 +232,15 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     openfluid::base::SchedulingRequest runStep()
     {
-      
-     
+
+
 
       openfluid::core::SpatialUnit* RS; /// define spatial units
 
 
       OPENFLUID_UNITS_ORDERED_LOOP("RS",RS) // run this loop over each unit for this time step!
       {
-       
+
        int  ID_RS =  RS->getID(); // get the ID of the UNIT
 
        openfluid::core::DoubleValue elevation;  /// elevation of RS
@@ -259,7 +259,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
           OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow);
 
-          
+
       }
 
        else {    // if it's any other timestep, calculate the flow into/from neighbouring units
@@ -270,7 +270,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
           openfluid::core::DoubleValue RS_length; // define length as double value type OF object
           OPENFLUID_GetAttribute(RS,"length",RS_length); // get the length of the RS
           double length_at_unit = RS_length.get();
-          
+
           openfluid::core::DoubleValue width = 10.0; // define the  width of the Prek - standard as of now, later according to type
 
           double area_at_unit = length_at_unit * width;
@@ -280,7 +280,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
           double previous_water_level_at_unit = previous_value.get()+elev_at_unit;
 
 
-         
+
           //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           /// this is where the loop starts!!
           //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,19 +315,19 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
           //// loop through all the connections and calculate the flow to each
 
-          for (int i = 0; i < vector_length ; i++) { 
+          for (int i = 0; i < vector_length ; i++) {
 
               std::string  ID_TO = OFLD_TO_list[i]; /// get the ID in question
 
               std::string  ID_TO_number = ID_TO.substr(3,3); /// erase the first three characters in the string  (RS#) to get just the number
-             
+
               int neighbour_ID = stoi(ID_TO_number); /// convert string to integer
 
-              /// check whether the neighbour is a RS or a SU 
-              std::string ID_TO_type = ID_TO.substr(0, 2); 
-            
-              std::string neighbour_variable;  
-            
+              /// check whether the neighbour is a RS or a SU
+              std::string ID_TO_type = ID_TO.substr(0, 2);
+
+              std::string neighbour_variable;
+
               if (ID_TO_type == "SU"){
                neighbour_variable = "z_new_flow_SU";
               }
@@ -338,22 +338,22 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               /// define the neighbouring unit that we're dealing with
               openfluid::core::SpatialUnit* RS_neighbour = OPENFLUID_GetUnit (ID_TO_type, neighbour_ID);  // use the neighbour type + number identified here
 
-              /// get water level of neighbour 
+              /// get water level of neighbour
               openfluid::core::DoubleValue water_level_neighbour;
-              OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,PreviousTimeIndex,water_level_neighbour); /// not sure if this is in the right order  
+              OPENFLUID_GetVariable(RS_neighbour,neighbour_variable,PreviousTimeIndex,water_level_neighbour); /// not sure if this is in the right order
 
-              /// get elevation of neighbour 
+              /// get elevation of neighbour
               openfluid::core::DoubleValue elevation_neighbour;  /// get elevation of neighbour unit as OFLD double
-              OPENFLUID_GetAttribute(RS_neighbour,"elev",elevation_neighbour); /// get attribute 
-              double elev_at_neighbour = elevation_neighbour.get(); /// convert to regular double 
+              OPENFLUID_GetAttribute(RS_neighbour,"elev",elevation_neighbour); /// get attribute
+              double elev_at_neighbour = elevation_neighbour.get(); /// convert to regular double
 
               /// Get ABSOLUTE water level of neighbour
               double  previous_water_level_at_neighbour = water_level_neighbour.get()+elev_at_neighbour; /// absolute water level OUTSIDE the SU at the beginning of the time step, detract gauge elev if it's the Bassac!
 
-              /// Get Connection Length 
+              /// Get Connection Length
               double conn_lengt_ati = stold(conn_lengt_list[i]); /// <--------- convert to double  value
 
-              /// Get ABSOLUTE elevation of the weir 
+              /// Get ABSOLUTE elevation of the weir
               double larger_elev;
 
               if (elev_at_unit >= elev_at_neighbour){
@@ -363,22 +363,30 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               else {
                 larger_elev = elev_at_neighbour;
               }
-              
+
               double z_weir = weir_height_rel; // define weir height as double
-              
+
               double Z_weir = z_weir+larger_elev; /// absolute elevation of the weir
 
               double weir_length = conn_lengt_ati; /// length of the weir (= length of the intersection SU/RS, or SU/SU)
 
-              double coeff = coefficient; /// coefficient to be calibrated => start with 0.4
+              ///// IF condition to determine whether it's a RS-RS connection, or something else (if it's RS-RS, much higher coefficient)
+              double coeff;
+
+              if (ID_TO_type == "RS"){
+                 coeff = 0.85;
+              }
+              else {
+                 coeff = coefficient;
+              }
 
               double dts = 60*dtd; /// timestep in seconds (for calculation)
 
               double Q_new;
-              
+
               if (Z_weir > previous_water_level_at_unit && Z_weir > previous_water_level_at_neighbour){
                 Q_new = 0;
-              } 
+              }
               else {
               //// Use Runge Kutta explicit scheme and weir equation (defined in separate flow formula to calculate new flow)
                 Q_new = water_level_new(previous_water_level_at_unit, previous_water_level_at_neighbour, Z_weir, weir_length, coeff, area_at_unit, dts);  // new water level as result of interaction with this unit
@@ -408,30 +416,30 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
           /// append new variable for export!
 
           openfluid::core::DoubleValue z_new_avg ; // get the average of the water levels calculated in the loop above
-          
+
           //double flow_sum = std::accumulate(values.begin(), values.end(), 0.0);
-        
-          double flow_sum; /// define sum of vector 
-          
-          for (auto& n : values) /// calculate sum of vector flows 
+
+          double flow_sum; /// define sum of vector
+
+          for (auto& n : values) /// calculate sum of vector flows
                  flow_sum += n;
-           
-          /// get previous water level, then add the new Q level 
-           
+
+          /// get previous water level, then add the new Q level
+
           double z_new_flow = flow_sum / area_at_unit + previous_water_level_at_unit;
 
           /// define final conditions : if absolute water level is below elev of unit, relative one is 0
           double z_new_flow_final;
-        
+
           if (z_new_flow < elev_at_unit) {
             z_new_flow_final = 0;
           }
           else {
             z_new_flow_final = z_new_flow-elev_at_unit;
           }
-        
+
          openfluid::core::DoubleValue z_new_flow_RS;
-         
+
          z_new_flow_RS.set(z_new_flow_final);
 
          OPENFLUID_AppendVariable(RS,"z_new_flow_RS",z_new_flow_RS);
