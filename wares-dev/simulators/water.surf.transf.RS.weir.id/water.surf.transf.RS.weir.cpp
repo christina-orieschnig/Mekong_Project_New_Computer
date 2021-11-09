@@ -40,6 +40,7 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.RS.weir.id");
   // Produced variable
 
   DECLARE_PRODUCED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m");
+  DECLARE_USED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m") ;
 
 
   // Required attributes for the test simulator:

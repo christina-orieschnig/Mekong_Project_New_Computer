@@ -34,6 +34,7 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.trans.SU.weir.id");
 
   //DECLARE_REQUIRED_VARIABLE("water.surf.H", "SU", "water height on surface of SU at the previous time step", "m");
   DECLARE_USED_VARIABLE("z_new_flow_SU", "SU", "water level in the SU", "m") ;
+  DECLARE_USED_VARIABLE("z_new_flow_RS", "RS", "water level in the RS", "m") ;
 
   // Produced variable
 
