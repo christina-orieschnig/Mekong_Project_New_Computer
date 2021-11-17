@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <run>
+  <scheduling deltat="1" constraint="none" />
+  <period begin="2019-07-27 00:59:59" end="2019-08-10 00:00:00" />
+ </run>
+
+
+</openfluid>
+

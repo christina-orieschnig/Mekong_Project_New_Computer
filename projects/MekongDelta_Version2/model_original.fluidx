@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <model>
+  <generator varname="water_level_input" unitsclass="RS" method="inject" enabled="1">
+   <param name="distribution" value="distri.dat"/>
+   <param name="sources" value="waterlevel.xml"/>
+   <param name="thresholdmax" value="1000"/>
+   <param name="thresholdmin" value="0"/>
+  </generator>
+  <generator varname="water_rain_rate" unitsclass="SU" method="inject" enabled="1">
+   <param name="distribution" value="distri.dat"/>
+   <param name="sources" value="rainfall.xml"/>
+   <param name="thresholdmax" value="1000"/>
+   <param name="thresholdmin" value="0"/>
+  </generator>
+  <simulator ID="water_surf_precipitation-su.id" enabled="1">
+  </simulator>
+  <simulator ID="water.surf.trans.SU.weir.id" enabled="1">
+   <param name="coefficient" value="0.1"/>
+   <param name="weir_height_rel" value="0.5"/>
+  </simulator>
+  <simulator ID="water.surf.transf.RS.weir.id" enabled="1">
+   <param name="coefficient" value="0.1"/>
+   <param name="weir_height_rel" value="0.5"/>
+  </simulator>
+  <simulator ID="observe_flow_simulator.id" enabled="1">
+  </simulator>
+ </model>
+
+
+</openfluid>
+

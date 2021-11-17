@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <datastore>
+  <dataitem id="SU" type="geovector" source="SU.shp" unitsclass="SU" />
+  <dataitem id="RS" type="geovector" source="RS.shp" unitsclass="RS" />
+ </datastore>
+
+
+</openfluid>
+

@@ -16,12 +16,14 @@
   <simulator ID="water_surf_precipitation-su.id" enabled="1">
   </simulator>
   <simulator ID="water.surf.trans.SU.weir.id" enabled="1">
-   <param name="coefficient" value="0.1"/>
-   <param name="weir_height_rel" value="1"/>
+   <param name="coefficient" value="0.125"/>
+   <param name="weir_height_rel" value="0.15"/>
   </simulator>
   <simulator ID="water.surf.transf.RS.weir.id" enabled="1">
-   <param name="coefficient" value="0.1"/>
-   <param name="weir_height_rel" value="1"/>
+   <param name="coefficient" value="0.125"/>
+   <param name="weir_height_rel" value="0.15"/>
+  </simulator>
+  <simulator ID="observe_flow_simulator.id" enabled="1">
   </simulator>
  </model>
 

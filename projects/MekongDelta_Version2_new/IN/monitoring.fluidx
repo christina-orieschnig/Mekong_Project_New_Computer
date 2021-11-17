@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<openfluid>
+ <monitoring>
+  <observer ID="export.vars.files.csv" enabled="1">
+   <param name="format.flow.colsep" value=";"/>
+   <param name="format.flow.commentchar" value="#"/>
+   <param name="format.flow.date" value="ISO"/>
+   <param name="format.flow.float-format" value="auto"/>
+   <param name="format.flow.header" value="colnames-as-comment"/>
+   <param name="format.flow.precision" value="5"/>
+   <param name="set.new.format" value="flow"/>
+   <param name="set.new.unitsIDs" value="*"/>
+   <param name="set.new.unitsclass" value="SU"/>
+   <param name="set.new.vars" value="z_new_flow_SU"/>
+  </observer>
+  <observer ID="export.vars.files.csv-multicols" enabled="0">
+   <param name="format.auto.colsep" value=";"/>
+   <param name="format.auto.date" value="ISO"/>
+   <param name="format.auto.header" value="colnames-as-comment"/>
+   <param name="set.autoAll.format" value="auto"/>
+   <param name="set.autoAll.selection" value="*#*:*"/>
+  </observer>
+ </monitoring>
+
+
+</openfluid>
+

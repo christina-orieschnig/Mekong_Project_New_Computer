@@ -53,6 +53,9 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.transf.RS.weir.id");
 
   // Simulator parameters (for later on)
 
+  //DECLARE_USED_PARAMETER("coeff", "basic weir coefficient", "-");
+  //DECLARE_USED_PARAMETER("length_modify", "coefficient to modify the basic intersection / weir length", "-");
+  //DECLARE_USED_PARAMETER("weir_height", "basic weir height - to be modified", "-");
   DECLARE_USED_PARAMETER("coefficient", "basic weir coefficient", "-");
   //DECLARE_USED_PARAMETER("length_modify", "coefficient to modify the basic intersection / weir length", "-");
   DECLARE_USED_PARAMETER("weir_height_rel", "basic weir height - to be modified", "-");
@@ -70,9 +73,9 @@ END_SIMULATOR_SIGNATURE;
 class Weir_modified : public openfluid::ware::PluggableSimulator
 {
  private:
-   double coefficient;
+   double Coefficient;
 
-   double weir_height_rel;
+   double Weir_height_rel;
 
    double Q_weir(double Z1, double Z2, double Z_weir, double length, double coeff){
 
@@ -171,18 +174,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     void initParams(const openfluid::ware::WareParams_t& Params)
     {
-      
-      openfluid::core::DoubleValue coefficient;
-      openfluid::core::DoubleValue weir_height_rel;
 
-      coefficient = 0.0;
-      if (!OPENFLUID_GetSimulatorParameter(Params,"coefficient",coefficient))
-        OPENFLUID_RaiseError("coefficinet ???");
-
-      weir_height_rel = 0.0;
-      if (!OPENFLUID_GetSimulatorParameter(Params,"weir_height_rel",weir_height_rel))
-        OPENFLUID_RaiseError("weir_height_rel ???");
-
+      OPENFLUID_GetSimulatorParameter(Params,"coefficient",Coefficient);
+       OPENFLUID_GetSimulatorParameter(Params,"weir_height_rel",Weir_height_rel);
 
     }
 
@@ -364,13 +358,13 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
                 larger_elev = elev_at_neighbour;
               }
               
-              double z_weir = weir_height_rel; // define weir height as double
+              double z_weir = Weir_height_rel; // define weir height as double
               
               double Z_weir = z_weir+larger_elev; /// absolute elevation of the weir
 
               double weir_length = conn_lengt_ati; /// length of the weir (= length of the intersection SU/RS, or SU/SU)
 
-              double coeff = coefficient; /// coefficient to be calibrated => start with 0.4
+              double coeff = Coefficient; /// coefficient to be calibrated => start with 0.4
 
               double dts = 60*dtd; /// timestep in seconds (for calculation)
 

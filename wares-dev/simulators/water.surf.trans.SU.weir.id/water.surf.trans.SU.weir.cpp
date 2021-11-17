@@ -52,8 +52,7 @@ BEGIN_SIMULATOR_SIGNATURE("water.surf.trans.SU.weir.id");
   DECLARE_USED_PARAMETER("coefficient", "basic weir coefficient", "-");
   //DECLARE_USED_PARAMETER("length_modify", "coefficient to modify the basic intersection / weir length", "-");
   DECLARE_USED_PARAMETER("weir_height_rel", "basic weir height - to be modified", "-");
-
-
+   
 END_SIMULATOR_SIGNATURE;
 
 
@@ -67,9 +66,10 @@ END_SIMULATOR_SIGNATURE;
 class Weir_modified : public openfluid::ware::PluggableSimulator
 {
  private:
-   double coefficient;
+   
+   double Coefficient;
 
-   double weir_height_rel;
+   double Weir_height_rel;
 
    double Q_weir(double Z1, double Z2, double Z_weir, double length, double coeff){
 
@@ -86,10 +86,10 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
             /// determine flow direction by sign of flow
             if (Z1 >= Z2){
-                sign = 1;
+                sign = -1;
                 }
             else {
-                sign = -1;
+                sign = 1;
                 }
 
             /// convert water elevations into heights above weir
@@ -119,9 +119,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     double water_level_new(double Z1, double Z2, double Z_weir, double length, double coeff, double A, double dts){
 
-        /*
+        
 
-        double k1 = Q_weir(Z1, Z2, Z_weir, length, coeff)///A; // divided by A gives height 
+        double k1 = Q_weir(Z1, Z2, Z_weir, length, coeff)/A; // divided by A gives height 
         double z2 = Z2 + dts / 2 * k1;
         double k2 = Q_weir (Z1, z2, Z_weir, length, coeff)/A;
         double z3 = Z2 + dts/2 * k2;
@@ -131,9 +131,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
         double km = (k1 + 2 * k2 + 2* k3 + k4)/6;
 
         double  Q_new = dts*km*A; // <------------ get flow in the time interval  Question : positive / negative! 
-        */
+        
 
-        double Q_new = Q_weir(Z1, Z2, Z_weir, length, coeff);
+       // double Q_new = Q_weir(Z1, Z2, Z_weir, length, coeff);
         return  Q_new;
       }
 
@@ -166,17 +166,9 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
 
     void initParams(const openfluid::ware::WareParams_t& Params)
     {
-      openfluid::core::DoubleValue coefficient;
-      openfluid::core::DoubleValue weir_height_rel;
 
-      coefficient = 0.0;
-      if (!OPENFLUID_GetSimulatorParameter(Params,"coefficient",coefficient))
-        OPENFLUID_RaiseError("coefficinet ???");
-
-      weir_height_rel = 0.0;
-      if (!OPENFLUID_GetSimulatorParameter(Params,"weir_height_rel",weir_height_rel))
-        OPENFLUID_RaiseError("weir_height_rel ???");
-
+      OPENFLUID_GetSimulatorParameter(Params,"coefficient",Coefficient);
+       OPENFLUID_GetSimulatorParameter(Params,"weir_height_rel",Weir_height_rel);
 
     }
 
@@ -341,12 +333,12 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
               larger_elev = elev_at_neighbour;
             }
             
-            double z_weir = weir_height_rel; // define weir height length as double value type OF object - will later be adjusted to connection type
+            double z_weir = Weir_height_rel; // define weir height length as double value type OF object - will later be adjusted to connection type
             double Z_weir = z_weir+larger_elev; /// absolute elevation of the weir
 
             double weir_length = conn_lengt_ati; /// length of the weir (= length of the intersection SU/RS, or SU/SU)
 
-            double coeff = coefficient; /// coefficient to be calibrated => start with 0.4
+            double coeff = Coefficient; /// coefficient to be calibrated => start with 0.4
 
             double dts = 60*dtd; /// timestep in seconds (for calculation)
            
@@ -360,6 +352,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
              Q_new = water_level_new(previous_water_level_at_unit, previous_water_level_at_neighbour, Z_weir, weir_length, coeff, area_at_unit, dts);  // new water level as result of interaction with this unit
             }
 
+/*
             OPENFLUID_LogAndDisplayInfo("ID");
             OPENFLUID_LogAndDisplayInfo(ID);
             OPENFLUID_LogAndDisplayInfo("ID_TO_type");
@@ -376,7 +369,7 @@ class Weir_modified : public openfluid::ware::PluggableSimulator
             OPENFLUID_LogAndDisplayInfo(previous_water_level_at_unit);
             OPENFLUID_LogAndDisplayInfo("flow");
             OPENFLUID_LogAndDisplayInfo(Q_new);
-            
+ */           
             values.push_back(Q_new); // add the new  value to the vector
 
         }
